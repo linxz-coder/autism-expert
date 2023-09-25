@@ -89,25 +89,27 @@ export default function Message({ai, user, content, isHistory = false, onAIReply
           <div className={`px-4 rounded-lg shadow-lg md:max-w-fit ${user ? 'bg-green-500 text-white' : 'bg-white text-black'}`}>
                 <ReactMarkdown className='markdown' rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]} 
                   components={{
-                    code({node, inline, className, children, ...props}) {
+                    code({node, inline, className,children,...props}) {
                     const match = /language-(\w+)/.exec(className || '')
                     return !inline && match ? (
                       <SyntaxHighlighter
                         {...props}
-                        children={String(children).replace(/\n$/, '')}
                         style={vscDarkPlus}
                         language={match[1]}
                         PreTag="div"
                         wrapLongLines={true}
-                      />
+                      >
+                        {String(children).replace(/\n$/, '')}  {/* Move children here */}
+                      </SyntaxHighlighter>
                     ) : (
                       <code {...props} className={className}>
-                        {children}
+                        {children}  {/* Move children here */}
                       </code>
                     )
                     }
                   }}
-                >{messageContent}
+                >
+                  {messageContent}
                 </ReactMarkdown>
           </div>
 
@@ -117,5 +119,6 @@ export default function Message({ai, user, content, isHistory = false, onAIReply
       </div>
     )
 }
+
 
 

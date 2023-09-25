@@ -107,9 +107,6 @@ export default function HomePage() {
             updateSessions(data);
             setTitleModified(true);
 
-            const updatedSessions = { ...sessions };
-            updatedSessions[currentSessionId].chatTitle = data;
-            setSessions(updatedSessions);
         } catch (error) {
             console.error("Error updating title:", error);
         }

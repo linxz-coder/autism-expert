@@ -1,6 +1,6 @@
 'use client'
 require('dotenv').config();
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import TextInput from '../components/TextInput';
 import Message from '../components/Message';
@@ -9,6 +9,7 @@ import SearchInput from '../components/SearchInput';
 import ChatItem from '../components/ChatItem';
 import MessageHistory from '../components/MessageHistory';
 import { formatTime } from '../utils/timeUtils';
+import Image from 'next/image';
 
 
 export default function HomePage() {
@@ -27,8 +28,6 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isTitleModified, setTitleModified] = useState(false);
   const [showChatSelector, setShowChatSelector] = useState(false);
-
-
 
   const selectSession = (selectedSessionId: string) => {
     const selectedSession = sessions[selectedSessionId];
@@ -55,8 +54,9 @@ export default function HomePage() {
     const aiMessage = { user: false, content: response };  // 增加AI标识
     const updatedMessages = [...messages, aiMessage];
     setMessages(updatedMessages);
+    setShouldUpdateTitle(true); 
 
-    console.log("After AI response messages: ", updatedMessages);  // 添加的log
+    // console.log("After AI response messages: ", updatedMessages);  
     
     // 更新sessions
     const updatedSessions = { ...sessions };
@@ -66,8 +66,7 @@ export default function HomePage() {
   }
     
   const handleSendMessage = (text) => {
-      console.log("User Sent Message:", text);
-      setShouldUpdateTitle(true); 
+      // console.log("User Sent Message:", text);
       setUserInput(text);
       const userMessage = { user: true, content: text };
       const updatedMessages = [...messages, userMessage];
@@ -76,52 +75,55 @@ export default function HomePage() {
       setMessages(updatedMessages);
       setUserMessages(updatedUserMessages);
 
-      console.log("handle-send messages: ", updatedMessages);  // 添加的log
+      // console.log("handle-send messages: ", updatedMessages);  
       
       const updatedSessions = { ...sessions };
       updatedSessions[currentSessionId].messages = updatedMessages;
       setSessions(updatedSessions);
-      console.log("handlesend-updatedSessions: ", updatedSessions);
+      // console.log("handlesend-updatedSessions: ", updatedSessions);
   };
 
   // 标题
+  const updateSessions = useCallback((title) => {
+    const updatedSessions = { ...sessions };
+    updatedSessions[currentSessionId].chatTitle = title;
+    setSessions(updatedSessions);
+  }, [currentSessionId, sessions]);
+
+  const updateTitle = useCallback (async () => {
+    if (messages.length >= 4) {
+        const lastThreeMessages = messages.slice(-3).map(msg => msg.content).join("\n");
+        try {
+            const response = await fetch('/api/title', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: lastThreeMessages }),
+            });
+            const data = await response.text();
+            setChatTitle(data);
+            updateSessions(data);
+            setTitleModified(true);
+        } catch (error) {
+            console.error("Error updating title:", error);
+        }
+    } else if (messages.length >= 1) {
+        const newTitle = "闲聊";
+        setChatTitle(newTitle);
+        updateSessions(newTitle);
+    }
+  }, [messages]);
+
   useEffect(() => {
     if (shouldUpdateTitle && !isTitleModified) {
-        let newTitle = "";
-        if (messages.length >= 4) {
-            const lastThreeMessages = messages.slice(-3).map(msg => msg.content).join("\n");
-            fetch('/api/title', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ content: lastThreeMessages }),
-            })
-            .then(response => response.text())
-            .then(data => {
-                setChatTitle(data);
-                setTitleModified(true);
-
-            const updatedSessions = { ...sessions };
-            updatedSessions[currentSessionId].chatTitle = data;
-            setSessions(updatedSessions);
-            });
-        } else if (messages.length >= 1) {
-            newTitle = "闲聊";
-            setChatTitle(newTitle);
-        }
-          const updatedSessions = { ...sessions };
-          updatedSessions[currentSessionId].chatTitle = newTitle;
-          setSessions(updatedSessions);
-        
+        updateTitle();
     }
-  }, [shouldUpdateTitle, messages]);
+  }, [shouldUpdateTitle, messages, updateTitle, isTitleModified]); 
 
   // 实时查看各个变量
-  useEffect(() => {
-    console.log("Now messages: ", messages);
-    console.log("Now userMessages: ", userMessages);
-  }, [messages, userMessages]);
+  // useEffect(() => {
+  //   console.log("Now messages: ", messages);
+  //   console.log("Now userMessages: ", userMessages);
+  // }, [messages, userMessages]);
 
   // 鼠标拖动左侧菜单
   useEffect(() => {
@@ -222,7 +224,7 @@ export default function HomePage() {
         <div className="flex items-center justify-between px-4 py-2">
           <h1 className="text-3xl font-bold text-pink-500">ChatFUN</h1>
           <button onClick={startNewSession}>
-             <img src="new.svg" className="w-5 h-5" alt="Start new chat"/>
+             <Image src="new.svg" width={20} height={20} alt="Start new chat"/>
           </button>
         </div>
 

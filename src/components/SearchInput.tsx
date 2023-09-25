@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 // 搜索功能
 export default function SearchInput({ searchQuery, setSearchQuery, setSearchResults, sessions  }) {
 
@@ -40,9 +42,12 @@ export default function SearchInput({ searchQuery, setSearchQuery, setSearchResu
                   ×
               </span>
           )}
-          <img 
+          <Image 
               src="search.svg"
-              className="w-5 h-5 mr-1"  
+              className="w-5 h-5 mr-1" 
+              width={20}
+              height={20}
+              alt="search-icon" 
           />
       </div>  
     )

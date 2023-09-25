@@ -1,18 +1,28 @@
 "use client"
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';  
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
 import {vscDarkPlus} from 'react-syntax-highlighter/dist/esm/styles/prism'
+import Image from 'next/image'
 
 export default function Message({ai, user, content, isHistory = false, onAIReply, chatHistory  }: {ai: boolean, user: boolean, content: string, isHistory: boolean, chatHistory:Array<{}>, onAIReply?: (reply: string) => void }){
   
   
   const [resultText, setResultText] = useState('');  // 使用useState来保存结果
 
+  const onAIReplyRef = useRef(onAIReply); 
+  const chatHistoryRef = useRef(chatHistory);
+  const isHistoryRef = useRef(isHistory);
+
   useEffect(() => {
+  
+  // 在 effect 内获取最新的 ref 值
+  const onAIReply = onAIReplyRef.current;
+  const chatHistory = chatHistoryRef.current;
+  const isHistory = isHistoryRef.current;
 
   if (ai && content && !isHistory) {
     const generate = async () => {
@@ -65,10 +75,15 @@ export default function Message({ai, user, content, isHistory = false, onAIReply
     
     return (
       <div className={`flex ${user ? 'flex-row-reverse' : ''}`}>
-          <img 
-            src={user ? 'me.png' : 'robot_ai.png'}
-            className="w-10 h-10 rounded-full"  
+        <div className='max-w-[40px] max-h-[40px]'>
+          <Image 
+            src={user ? '/me.png' : '/robot_ai.png'}
+            className="rounded-full"
+            width={200}
+            height={200}
+            alt = "avatar"
           />
+        </div>
     
         <div className={`flex flex-col ${user ? 'mr-3 ml-14' : 'mr-14 ml-3'}`}>
           <div className={`px-4 rounded-lg shadow-lg md:max-w-fit ${user ? 'bg-green-500 text-white' : 'bg-white text-black'}`}>
@@ -92,7 +107,8 @@ export default function Message({ai, user, content, isHistory = false, onAIReply
                     )
                     }
                   }}
-                >{messageContent}</ReactMarkdown>
+                >{messageContent}
+                </ReactMarkdown>
           </div>
 
           <div className='mb-8'></div>

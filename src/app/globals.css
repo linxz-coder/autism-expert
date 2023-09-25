@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+.text-gradient {
+  @apply bg-gradient-to-r bg-clip-text text-transparent from-pink-500 to-purple-500
+ }
+
+ .markdown > * {
+  all: revert;
+}
+
+/* 表格 */
+table {
+  width: 100%;
+  /* border-collapse: collapse; */
+  /* border-spacing: 0; */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* 为表格添加轻微的阴影 */
+  /* overflow: hidden; */
+  background-color: #ccc; /* 背景色 */
+  border: 10px solid #ccc; /* 边框颜色 */
+}
+
+th, td {
+  border-top: 1px solid #e0e0e0;
+  border-left: 1px solid #e0e0e0;
+  padding: 5px;
+  position: relative;
+  /* text-align: middle; */
+}
+
+th:after, td:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -3px;
+  bottom: 0;
+  width: 1px;
+  background-color: #e0e0e0;
+  display: block;
+}
+
+th {
+  background-color: #b3e5fc;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+}
+
+td {
+  text-align: center;
+}
+
+tr:last-child td, tr:last-child th {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+th:last-child:after, td:last-child:after {
+  right: 0;
+}

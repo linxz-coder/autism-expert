@@ -1,6 +1,6 @@
 'use client'
 require('dotenv').config();
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import TextInput from '../components/TextInput';
 import Message from '../components/Message';
@@ -84,11 +84,14 @@ export default function HomePage() {
   };
 
   // 标题
+  // 不更新session，改成ref，就可以避免依赖项
+  const sessionsRef = useRef(sessions);
+
   const updateSessions = useCallback((title) => {
-    const updatedSessions = { ...sessions };
+    const updatedSessions = { ...sessionsRef.current };
     updatedSessions[currentSessionId].chatTitle = title;
     setSessions(updatedSessions);
-  }, [currentSessionId, sessions]);
+  }, [currentSessionId]);
 
   const updateTitle = useCallback (async () => {
     if (messages.length >= 4) {
@@ -103,6 +106,10 @@ export default function HomePage() {
             setChatTitle(data);
             updateSessions(data);
             setTitleModified(true);
+
+            const updatedSessions = { ...sessions };
+            updatedSessions[currentSessionId].chatTitle = data;
+            setSessions(updatedSessions);
         } catch (error) {
             console.error("Error updating title:", error);
         }
@@ -111,13 +118,13 @@ export default function HomePage() {
         setChatTitle(newTitle);
         updateSessions(newTitle);
     }
-  }, [messages]);
+  }, [messages, updateSessions]);
 
   useEffect(() => {
     if (shouldUpdateTitle && !isTitleModified) {
         updateTitle();
     }
-  }, [shouldUpdateTitle, messages, updateTitle, isTitleModified]); 
+  }, [shouldUpdateTitle, updateTitle, isTitleModified]); 
 
   // 实时查看各个变量
   // useEffect(() => {

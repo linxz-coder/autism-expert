@@ -23,6 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/utils/timeUtils.js", "src/components/TextInput.jsx", "src/components/SearchInput.jsx", "src/components/MessageHistory.jsx", "src/components/Message.jsx", "src/components/ChatItem.jsx", "src/components/ChatHeader.jsx", "src/app/page.jsx"],
   "exclude": ["node_modules"]
 }

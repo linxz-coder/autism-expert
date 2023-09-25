@@ -29,7 +29,7 @@ export default function HomePage() {
   const [isTitleModified, setTitleModified] = useState(false);
   const [showChatSelector, setShowChatSelector] = useState(false);
 
-  const selectSession = (selectedSessionId: string) => {
+  const selectSession = (selectedSessionId) => {
     const selectedSession = sessions[selectedSessionId];
     console.log("selectedSession:", selectedSession);
     if (selectedSession) {
@@ -50,7 +50,7 @@ export default function HomePage() {
   };
 
 
-  const handleAIResponse = (response: string) => {
+  const handleAIResponse = (response) => {
     const aiMessage = { user: false, content: response };  // 增加AI标识
     const updatedMessages = [...messages, aiMessage];
     setMessages(updatedMessages);

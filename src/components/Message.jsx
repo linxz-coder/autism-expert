@@ -8,7 +8,7 @@ import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
 import {vscDarkPlus} from 'react-syntax-highlighter/dist/esm/styles/prism'
 import Image from 'next/image'
 
-export default function Message({ai, user, content, isHistory = false, onAIReply, chatHistory  }: {ai: boolean, user: boolean, content: string, isHistory: boolean, chatHistory:Array<{}>, onAIReply?: (reply: string) => void }){
+export default function Message({ai, user, content, isHistory = false, onAIReply, chatHistory  }){
   
   
   const [resultText, setResultText] = useState('');  // 使用useState来保存结果

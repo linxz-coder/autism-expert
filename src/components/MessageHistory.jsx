@@ -2,7 +2,7 @@
 import React from 'react';
 import Message from './Message';
 
-export default function MessageHistory({ oldMessages }: { oldMessages: any[] }) {
+export default function MessageHistory({ oldMessages }) {
     return (
       <>
         {oldMessages && oldMessages.map((message, index) => (

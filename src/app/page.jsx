@@ -84,13 +84,15 @@ export default function HomePage() {
   };
 
   // 标题
-  // 不更新session，改成ref，就可以避免依赖项
-  const sessionsRef = useRef(sessions);
 
   const updateSessions = useCallback((title) => {
-    const updatedSessions = { ...sessionsRef.current };
-    updatedSessions[currentSessionId].chatTitle = title;
-    setSessions(updatedSessions);
+    // 将依赖项由sessions改为setSessions，避免循环依赖
+    setSessions((prevSessions) => {
+      const updatedSessions = { ...prevSessions };
+      // console.log("updateSessions now: ", updatedSessions);
+      updatedSessions[currentSessionId].chatTitle = title;
+      return updatedSessions;
+    });
   }, [currentSessionId]);
 
   const updateTitle = useCallback (async () => {
@@ -125,9 +127,8 @@ export default function HomePage() {
 
   // 实时查看各个变量
   // useEffect(() => {
-  //   console.log("Now messages: ", messages);
-  //   console.log("Now userMessages: ", userMessages);
-  // }, [messages, userMessages]);
+  //   console.log("Now sessions: ", sessions);
+  // }, [sessions]);
 
   // 鼠标拖动左侧菜单
   useEffect(() => {
@@ -182,6 +183,12 @@ export default function HomePage() {
     setSessions({...sessions, [newSessionId]: newSession});
     setCurrentSessionId(newSessionId);
 
+    // setSessions(prev => {
+    //   const newSessionId = uuidv4();
+    //   const newSession = { messages: [], chatTitle: '对话标题', startTime: formatTime(new Date()) };
+    //   setCurrentSessionId(newSessionId);
+    //   return { ...prev, [newSessionId]: newSession }
+    // })
 
     // 重置当前聊天内容
     setTitleModified(false); // 也要重置这个状态，否则新的对话达到3条消息时，标题可能不会修改

@@ -3,7 +3,7 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'https://8.218.72.177:5328/api/:path*',
+        destination: 'https://www.commonlearner.com:443/api/:path*',
       },
     ];
   },

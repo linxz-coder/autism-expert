@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from flask_cors import CORS
 import openai
 
-from supabase.client import create_client
+from supabase import create_client
 from langchain.embeddings import MiniMaxEmbeddings
 from langchain.vectorstores import SupabaseVectorStore
 

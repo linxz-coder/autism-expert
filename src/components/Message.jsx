@@ -31,7 +31,7 @@ export default function Message({ai, user, content, isHistory = false, onAIReply
         const chatHistoryStr = JSON.stringify(chatHistory); // 将chatHistory转化为字符串
 
         // Fetch the response from the OpenAI API with the signal from AbortController
-          const response = await fetch("http://127.0.0.1:5328/api/python", {
+          const response = await fetch("http://8.218.72.177:5328/api/python", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

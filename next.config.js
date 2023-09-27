@@ -3,14 +3,10 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination:
-          process.env.NODE_ENV === 'development'
-            ? 'http://8.218.72.177:5328/api/:path*'
-            : '/api/',
+        destination: 'http://8.218.72.177:5328/api/:path*',
       },
     ]
   },
 }
 
 module.exports = nextConfig
-

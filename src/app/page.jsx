@@ -99,7 +99,7 @@ export default function HomePage() {
     if (messages.length >= 4) {
         const lastThreeMessages = messages.slice(-3).map(msg => msg.content).join("\n");
         try {
-            const response = await fetch('http://8.218.72.177:5328//api/title', {
+            const response = await fetch('https://8.218.72.177:5328//api/title', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ content: lastThreeMessages }),

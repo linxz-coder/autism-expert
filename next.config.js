@@ -3,14 +3,10 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://8.218.72.177:5328/api/:path*',
+        destination: 'https://8.218.72.177:5328/api/:path*',
       },
-    ]
+    ];
   },
-}
-
-// module.exports = nextConfig
-module.exports = {
   async headers() {
     return [
       {
@@ -23,6 +19,8 @@ module.exports = {
           { key: "Access-Control-Allow-Headers", value: "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version" },
         ]
       }
-    ]
-  }
+    ];
+  },
 };
+
+module.exports = nextConfig;

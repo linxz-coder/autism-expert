@@ -75,12 +75,12 @@ export default function Message({ai, user, content, isHistory = false, onAIReply
     
     return (
       <div className={`flex ${user ? 'flex-row-reverse' : ''}`}>
-        <div className='max-w-[40px] max-h-[40px]'>
+        <div className='min-w-[40px] min-h-[40px]'>
           <Image 
             src={user ? '/me.png' : '/robot_ai.png'}
             className="rounded-full"
-            width={200}
-            height={200}
+            width={40}
+            height={40}
             alt = "avatar"
           />
         </div>
